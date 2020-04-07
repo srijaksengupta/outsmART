@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="card text-center mb-3">
+  <div class="card-body">
+
+    <h1>Welcome {{request.user.username}}</h1>
+
+    <p>This is an example Django marketplace</p>
+  </div>
+</div>
+
+<div class="card text-center mb-3">
+  <div class="card-body">
+    <h1>Popular products</h1>
+    <p>List of products</p>
+  </div>
+</div>
+
+
+<div class="card text-center mb-3">
+  <div class="card-body">
+    <h1>Reccomended products</h1>
+    <p>List of products</p>
+  </div>
+</div>
+
+
+{% endblock %}
