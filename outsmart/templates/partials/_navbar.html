@@ -9,7 +9,9 @@
       <div class="navbar-nav">
         <a class="nav-item nav-link active" href="{% url 'pages:index' %}">Home <span class="sr-only">(current)</span></a>
         <a class="nav-item nav-link" href="#">My Orders</a>
-        <a class="nav-item nav-link" href="#">Browse Products</a>
+        <a class="nav-item nav-link" href="{% url 'products:browse' %}">Browse Products</a>
+        <a class="nav-item nav-link" href="{% url 'products:add' %}">Add Products</a>
+
       </div>
     </div>
 

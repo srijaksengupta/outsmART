@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Products</h1>
+
+<div class="row">
+
+{% for p in products %}
+
+    <div class="col-md-6">
+      <div class="card mb-4 box-shadow">
+        <img class="card-img-top" img src="{{p.image.url}}" height="200" alt="Card image cap">
+        <div class="card-body">
+          <p class="card-text">{{p.title}}</p>
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">Add to Wishlist</button>
+            </div>
+        </div>
+      </div>
+    </div>
+{% endfor %}
+
+</div> 
+
+
+{% endblock %}
