@@ -10,6 +10,7 @@ class ProductPost(models.Model):
     title = models.CharField(max_length=100,default="test")
     descrip = models.CharField(max_length=10000)
     stock = models.IntegerField(default=0)
+    tags = models.CharField(max_length=10000,default="test")
     image = models.FileField()
     created = models.DateTimeField(auto_now_add=True)
     
