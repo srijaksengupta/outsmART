@@ -7,18 +7,37 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-item nav-link active" href="{% url 'pages:index' %}">Home <span class="sr-only">(current)</span></a>
-        <a class="nav-item nav-link" href="#">My Orders</a>
+        <a class="nav-item nav-link" href="{% url 'pages:index' %}">Home</a>
         <a class="nav-item nav-link" href="{% url 'products:browse' %}">Browse Products</a>
-        <a class="nav-item nav-link" href="{% url 'products:add' %}">Add Products</a>
+
+        {% if user.is_authenticated %}
+        <a class="nav-item nav-link" href="#">My Orders</a>
+        <div class= "nav-item nav-link" >
+          <div class="dropdown">
+            <div class="dropbtn"> Control Panel</div>
+            <div class="dropdown-content">
+              <a href="{% url 'products:add' %}">Add Products</a>
+              <a href="#">View Listings</a>
+              <a href="#">Manage Messages</a>
+            </div>
+          </div>
+        </div>
+        {% endif %}
+
 
       </div>
     </div>
 
+
+    {% if user.is_authenticated %}
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" href="{% url 'account:logout' %}">Logout {{user.username}}</a>
+    </div>
+    {% else %}
     <div class="navbar-nav">
         <a class="nav-item nav-link" href="{% url 'account:login' %}">Login</a>
         <a class="nav-item nav-link" href="{% url 'account:signup' %}">Register</a>
-
     </div>
+    {% endif %}
 
   </nav>
