@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
+
+
+
+ <main class="product-container">
+ 
+    <!-- Left Column / Headphones Image -->
+    <div class="left-column">
+      <img src="{{product.image.url}}" alt="" class="active">
+    </div>
+   
+   
+    <!-- Right Column -->
+    <div class="right-column">
+   
+      <!-- Product Description -->
+      <div class="product-description">
+        <span>{{product.tags}}</span>
+        <h1>{{product.title}}</h1>
+        <p>{{product.descrip}}</p>
+        <span>Created by: {{product.owner}}</span>
+      </div>
+   
+      <!-- Product Pricing -->
+      <div class="product-price">
+        <span>£{{product.price}}</span>
+        <a href="#" class="cart-btn">Add to cart</a>
+      </div>
+
+      
+
+    </div>
+  </main>
+
+  <div class="reviews">
+      <h1>Customer Reviews</h1>
+  </div>
+
+
+    {% endblock %}

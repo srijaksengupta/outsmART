@@ -1,28 +1,53 @@
 {% extends 'base.html' %}
 {% block content %}
 
-<h1>Products</h1>
+<div class="card text-center mb-3">
+  <div class="card-body">
+    <input type="text" class="form-control mb-3" placeholder="Search for products" />
+
+    <div class="input-group mb-3">
+      <div class="input-group-prepend">
+        <label class="input-group-text" for="inputGroupSelect01">Sort By</label>
+      </div>
+      <select class="custom-select" id="inputGroupSelect01">
+        <option selected>Choose...</option>
+        <option value="1">Relevance</option>
+        <option value="2">Rating</option>
+        <option value="3">Newest</option>
+      </select>
+    </div>
+
+
+  </div>
+</div>
 
 <div class="row">
 
 {% for p in products %}
 
-    <div class="col-md-6">
-      <div class="card mb-4 box-shadow">
-        <img class="card-img-top" img src="{{p.image.url}}" height="200" alt="Card image cap">
-        <div class="card-body">
-          <p class="card-text">{{p.title}}</p>
-          <h1>{{p.tags}}</h1>
-            <div class="btn-group">
-              <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
-              <button type="button" class="btn btn-sm btn-outline-secondary">Add to Wishlist</button>
-            </div>
-        </div>
+<div class="product-card">
+  <div class="badge">Hot</div>
+  <div class="product-tumb">
+    <img src="{{p.image.url}}" alt="">
+  </div>
+  <div class="product-details">
+    <span class="product-catagory">{{p.tags}}</span>
+    <h4><a href="{% url 'products:detail' p.id %}">{{p.title}}</a></h4>
+    <p>{{p.summary}}</p>
+    <div class="product-bottom-details">
+      <div class="product-price">£{{p.price}}</div>
+      <div class="product-links">
+        <button type="button" class="btn btn-primary">Wishlist</button>
       </div>
     </div>
+  </div>
+</div>
+
 {% endfor %}
 
 </div> 
+
+
 
 
 {% endblock %}
