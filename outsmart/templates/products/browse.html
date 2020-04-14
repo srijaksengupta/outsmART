@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% block content %}
 
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
+
+
 <div class="card text-center mb-3">
   <div class="card-body">
     <input type="text" class="form-control mb-3" placeholder="Search for products" />
@@ -16,7 +21,6 @@
         <option value="3">Newest</option>
       </select>
     </div>
-
 
   </div>
 </div>
@@ -46,7 +50,6 @@
 {% endfor %}
 
 </div> 
-
 
 
 

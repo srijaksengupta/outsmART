@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 def get_upload_path(instance, filename):
     return 'user-' + str(instance.owner.id) + '/' + filename
@@ -15,5 +16,13 @@ class ProductPost(models.Model):
     image = models.FileField()
     created = models.DateTimeField(auto_now_add=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
-    
-    
+    rating =  models.IntegerField(default=0,
+        validators=[
+            MaxValueValidator(10),
+            MinValueValidator(0)
+        ])
+    sold = models.IntegerField(default=0)
+    revenue = models.DecimalField(default=0,max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return 'Product: {} by {}'.format(self.title,self.owner)

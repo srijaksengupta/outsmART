@@ -19,6 +19,12 @@ def add_products(request):
             inst.save()
     return render(request, 'products/add.html')
 
+@login_required
+def my_listings(request):
+    context = {'products': ProductPost.objects.filter(owner=request.user)}
+    return render(request, 'products/listings.html',context)
+
+
 # Create your views here.
 def detail(request, product_id):
     try:

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
+
+{% for product in products %}
+
+
+<main class="listing-container">
+ 
+  <!-- Left Column / Headphones Image -->
+  <div class="listing-left-column">
+    <img src="{{product.image.url}}" alt="" class="">
+  </div>
+ 
+  <!-- Right Column -->
+  <div class="listing-right-column">
+    <!-- Product Pricing -->
+    <div class="listing-statistics">
+          <p><b>PRODUCT ID:</b> #{{product.id}} </p>
+          <p><b>NAME:</b> {{product.title}} </p>
+          <p><b>STOCK:</b> {{product.stock}} </p>
+          <p><b>SOLD:</b> {{product.sold}} </p>
+          <p><b>REVENUE:</b> £{{product.revenue}} </p>
+          <p><b>AVG RATING:</b> {{product.rating}} </p>
+    </div>
+
+        <!-- Product Pricing -->
+      <div class="listing-controls">
+        <a href="{% url 'products:detail' product.id %}" class="btn btn-primary">View</a>
+        <button type="button" class="btn btn-primary">Modify</button>
+        <button type="button" class="btn btn-success">Add Stock</button>
+        <a href="{% url 'products:listings' %}" class="btn btn-danger">Delete</a>
+      </div>
+  </div>
+
+</main>
+  
+
+{% endfor %}
+
+
+{% endblock %}
