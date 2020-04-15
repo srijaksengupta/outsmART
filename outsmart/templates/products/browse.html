@@ -21,7 +21,6 @@
         <option value="3">Newest</option>
       </select>
     </div>
-
   </div>
 </div>
 
@@ -41,7 +40,11 @@
     <div class="product-bottom-details">
       <div class="product-price">£{{p.price}}</div>
       <div class="product-links">
-        <button type="button" class="btn btn-primary">Wishlist</button>
+          <form>
+           {% csrf_token %}
+           <button onclick='addWishlist("{{p.id}}")' class="btn btn-danger" name="product" ><i class="fas fa-heart"></i></button>
+            <button type="submit" class="btn btn-dark"><i class="fas fa-shopping-basket"></i></button>
+        </form>
       </div>
     </div>
   </div>
@@ -50,6 +53,26 @@
 {% endfor %}
 
 </div> 
+
+
+<script type="text/javascript">
+
+function addWishlist(value) {
+    link = "{% url 'products:add_wishlist' %}";
+    $.ajax({
+      type:'POST',
+      url: link,
+      data:{
+        product: value,
+        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+      },
+      success: function(){
+        alert("Added product to wishlist");
+      }
+    });
+}  
+</script>
+
 
 
 

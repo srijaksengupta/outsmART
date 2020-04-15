@@ -26,3 +26,8 @@ class ProductPost(models.Model):
 
     def __str__(self):
         return 'Product: {} by {}'.format(self.title,self.owner)
+
+
+class Wishlist(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey(ProductPost, on_delete=models.CASCADE)
