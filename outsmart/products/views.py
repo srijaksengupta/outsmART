@@ -47,7 +47,9 @@ def my_cart(request):
 def add_wishlist(request):
     if(request.method) == 'POST':
         productID = request.POST['product']
-        productAdd =  ProductPost.objects.get(pk=productID)
-        p = Wishlist(owner=request.user, product=productAdd)
-        p.save()
+        productAdd = ProductPost.objects.get(pk=productID)
+
+        if(Wishlist.objects.filter(owner=request.user,product=productAdd).count()==0):
+            p = Wishlist(owner=request.user, product=productAdd)
+            p.save()
         return HttpResponse('')
