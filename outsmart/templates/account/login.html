@@ -1,10 +1,21 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<ul class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+</ul>
+
 <container class="text-center">
 
 <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-<form action="" method="post">
+<form action="" method="POST">
   {% csrf_token %}
   <div class="form-group">
     <div>{{ form.non_field_errors }}</div>
