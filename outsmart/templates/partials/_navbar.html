@@ -1,6 +1,7 @@
 
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-info text-white mb-4">
+
     <a class="navbar-brand" href="#">outsmART</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -28,7 +29,6 @@
       </div>
     </div>
 
-
     {% if user.is_authenticated %}
     <div class="navbar-nav">
       <a class="btn btn-danger" style="margin-right: 10px;"  href="{% url 'products:wishlist' %}"><i class="fas fa-heart"></i> Wishlist</a>
@@ -44,4 +44,4 @@
     </div>
     {% endif %}
 
-  </nav>
+</nav>

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="col-md-6 m-auto">
+    <div class="card text-left mb-3">
+        <div class="card-header bg-info text-light"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit Product</div>
+        <div class="card-body">
+            <form action="" method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div>{{ form.non_field_errors }}</div>
+                <div class="form-group">
+                    {{form.title.errors}}
+                    <label for="title">Title of Product: </label>
+                    <br>
+                    {{form.title}}
+                </div>
+                <div class="form-group">
+                    {{form.summary.errors}}
+                    <label for="title">Summary: </label>
+                    <br>
+                    {{form.summary}}
+                </div>
+                <div class="form-group">
+                    {{form.descrip.errors}}
+                    <label for="descrip">Description: </label>
+                    <br>
+                    {{form.descrip}}
+                </div>
+                <div class="form-group">
+                    {{form.price.errors}}
+                    <label for="price">Price: </label>
+                    <br>
+                    {{form.price}}
+                </div>
+                <div class="form-group">
+                    {{form.stock.errors}}
+                    <label for="stock">Stock: </label>
+                    <br>
+                    {{form.stock}}
+                </div>
+                <div class="form-group">
+                    {{form.tags.errors}}
+                    <label for="tags">Tags: </label>
+                    <br>
+                    {{form.tags}}
+                </div>
+                <div class="form-group">
+                    {{form.image.errors}}
+                    <label for="image">Image: </label>
+                    <br>
+                    <div style="border: #cccccc solid 1px;">{{form.image}}</div>
+                </div>
+                <button class="btn btn-success" type="submit">Save</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
