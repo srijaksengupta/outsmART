@@ -5,8 +5,18 @@
 
 <link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
 
-{% for product in products %}
+<ul class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+</ul>
 
+{% for product in products %}
 
 <main class="listing-container">
  
@@ -30,9 +40,8 @@
         <!-- Product Pricing -->
       <div class="listing-controls">
         <a href="{% url 'products:detail' product.id %}" class="btn btn-primary">View</a>
-        <button type="button" class="btn btn-primary">Modify</button>
-        <button type="button" class="btn btn-success">Add Stock</button>
-        <a href="{% url 'products:listings' %}" class="btn btn-danger">Delete</a>
+        <a href="{% url 'products:edit_products' pk=product.id %}" class="btn btn-primary">Update</a>
+        <a href="{% url 'products:delete_products' pk=product.id %}" class="btn btn-danger">Delete</a>
       </div>
   </div>
 
