@@ -19,4 +19,7 @@ urlpatterns = [
     url(r'^add-to-cart/(?P<item_id>[-\w]+)/$', views.add_to_cart, name="add_to_cart"),
     url(r'^item/delete/(?P<item_id>[-\w]+)/$', views.delete_from_cart, name='delete_item'),
     url(r'^item/edit-item/(?P<item_id>[-\w]+)/$', views.edit_item, name='edit_item'),
+    url(r'^checkout/$', views.checkout, name='checkout'),
+    url(r'^charge/$', views.charge, name='charge'),
+    url(r'^update-transaction/(?P<token>[-\w]+)/$', views.update_transaction_records, name='update_records'),
 ]

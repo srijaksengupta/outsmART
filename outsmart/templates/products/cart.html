@@ -14,7 +14,7 @@
 
 <div class="px-4 px-lg-0">
     <div>
-        <h1 style="font-family: 'Serif'; text-align: center;"> Shopping Cart </h1>
+        <h1 style="font-family: 'Serif'; text-align: center;"> Shopping Cart <a href="{% url 'products:browse' %}" class="btn btn-info rounded-pill border-0" style="background-color: goldenrod">Continue Shopping</a></h1>
     </div>
     <br>
 
@@ -110,7 +110,8 @@
                                     <h5 class="font-weight-bold">${{ order.get_cart_total_plus_tax_plus_shipping|floatformat:2 }}</h5>
                                 {% endif %}
                             </li>
-                        </ul><a href="#" class="btn btn-dark rounded-pill py-2 btn-block">Proceed to checkout</a>
+                        </ul>
+                        <a href="{% url 'products:checkout' %}" class="btn btn-dark rounded-pill py-2 btn-block">Proceed to checkout</a>
                     </div>
                 </div>
             </div>
