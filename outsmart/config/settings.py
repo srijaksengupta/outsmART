@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'outsmart',
+    'stripe',
 ]
 
 MIDDLEWARE = [
@@ -131,7 +132,7 @@ STATICFILES_DIRS = [
 
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 
 
 LOGIN_URL = '/account/login'
@@ -151,3 +152,8 @@ MESSAGE_TAGS = {
     messages.WARNING: 'alert-warning',
     messages.ERROR: 'alert-danger',
 }
+
+# Stripe Settings
+
+STRIPE_PUBLISHABLE_KEY = 'pk_test_eSBur7E8nsUcXJLefxl0Mlw800lwNABjNa'
+STRIPE_SECRET_KEY = 'sk_test_rESwA1MMgKcnXpmUPF6UMXz40077UE7g8E'

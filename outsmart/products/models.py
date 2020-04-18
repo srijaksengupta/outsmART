@@ -30,14 +30,14 @@ class ProductPost(models.Model):
 
 
 class OrderItem(models.Model):
-    product = models.OneToOneField(ProductPost, on_delete=models.SET_NULL, null=True)
+    product = models.ForeignKey(ProductPost, on_delete=models.SET_NULL, null=True)
     is_ordered = models.BooleanField(default=False)
     date_added = models.DateTimeField(auto_now=True)
     date_ordered = models.DateTimeField(null=True)
     quantity = models.IntegerField(default=1)
 
     def __str__(self):
-        return 'Product: {} by {}'.format(self.product.title,self.product.owner)
+        return 'Product: {} by {} at {} qty {}'.format(self.product.title,self.product.owner, self.date_added, self.quantity)
 
 
 class Order(models.Model):
@@ -55,6 +55,7 @@ class Order(models.Model):
             return sum([item.product.price*item.quantity for item in self.items.all()])
         else:
             return None
+
 
     def get_tax(self):
         if sum([item.product.price*item.quantity for item in self.items.all()]):
@@ -77,6 +78,21 @@ class Order(models.Model):
 
     def __str__(self):
         return '{0} - {1}'.format(self.owner, self.ref_code)
+
+
+class Transaction(models.Model):
+    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=120)
+    order_id = models.CharField(max_length=120)
+    amount = models.FloatField(max_length=100, default=0.0)
+    success = models.BooleanField(default=True)
+    timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
+
+    def __str__(self):
+        return self.order_id
+
+    class Meta:
+        ordering = ['-timestamp']
 
 
 class Wishlist(models.Model):

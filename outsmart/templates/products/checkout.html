@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Checkout
+{% endblock %}
+
+{% block content %}
+<ul class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+</ul>
+
+{% load static %}
+
+<div class="container">
+  <section>
+    <div class="row" id="tablerow">
+      <div class="col-md-4 col-xs-12">
+        <div class="panel panel-primary">
+          <div class="panel-body">
+            <h5>Enter Shipping/Billing Address:</h5>
+            <div>
+                <br>
+                <label>Full name <label style="color: red;">*</label></label>
+                <input type="text"  name="full_name" class="form-control required" placeholder="Enter Full Name">
+                <input type="hidden"  name="order_id" value="{{ order.id }}">
+                <br>
+                <label>Street Address <label style="color: red;">*</label></label>
+                <textarea rows="4" cols="50" class="form-control required" name="street_address" placeholder="Enter Street Address"></textarea>
+                <input type="hidden"  name="order_id" value="{{ order.id }}">
+                <br>
+                <label>City <label style="color: red;">*</label></label>
+                <input type="text"  name="city" class="form-control required" placeholder="Enter City">
+                <input type="hidden"  name="order_id" value="{{ order.id }}">
+                <br>
+                <label>State <label style="color: red;">*</label></label>
+                <input type="text"  name="state" class="form-control required" placeholder="Enter State">
+                <input type="hidden"  name="order_id" value="{{ order.id }}">
+                <br>
+                <label>Country <label style="color: red;">*</label></label>
+                <input type="text"  name="country" class="form-control required" placeholder="Enter Country">
+                <input type="hidden"  name="order_id" value="{{ order.id }}">
+                <br>
+                <span>
+                    <input type="submit" class="btn btn-warning pull-right" value="Save Address">
+                </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-8 col-xs-12 pull-right">
+        <table class="table">
+          <tr>
+            <td colspan="2">
+                <h4>Order Summary</h4>
+            </td>
+          </tr>
+
+          {% for item in order.get_cart_items %}
+          <tr>
+            <td>{{ item.product.title }}</td>
+            <td>${{ item.product.price }} x {{ item.quantity }}</td>
+          </tr>
+          {% endfor %}
+          <tr>
+              <td><strong>Shipping charges:</strong> </td>
+              <td> <strong>${{ order.get_shipping_charges }}</strong></td>
+          </tr>
+            <tr>
+              <td><strong>Taxes:</strong> </td>
+              <td> <strong>${{ order.get_tax }}</strong></td>
+          </tr>
+          <tr>
+              <td><strong>Order Total (including tax and shipping charges)</strong> </td>
+              <td> <strong>${{ order.get_cart_total_plus_tax_plus_shipping }}</strong></td>
+          </tr>
+        </table>
+
+        <form action="{% url 'products:charge' %}" method="POST">
+            {% csrf_token %}
+            <script src="https://checkout.stripe.com/checkout.js" class="stripe-button"
+                    data-key="{{ key }}"
+                    data-description="Stripe Payment Gateway"
+                    data-amount="{{ amount }}"
+                    data-locale="auto">
+            </script>
+        </form>
+
+      </div>
+    </div>
+  </section>
+</div>
+
+{% endblock %}
