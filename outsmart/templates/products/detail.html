@@ -4,8 +4,6 @@
 
 <link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
 
-
-
  <main class="product-container">
  
     <!-- Left Column / Headphones Image -->
@@ -27,8 +25,12 @@
    
       <!-- Product Pricing -->
       <div class="product-price">
-        <span>£{{product.price}}</span>
-        <a href="#" class="cart-btn">Add to cart</a>
+          <span>${{product.price|floatformat:2}}</span>
+          {% if product.stock != 0 %}
+            <a href="{% url 'products:add_to_cart' item_id=product.id %}" class="cart-btn">Add to cart</a>
+          {% else %}
+            <a href="" class="btn btn-danger disabled">Out of Stock</a>
+          {% endif %}
       </div>
 
             <!-- Product Pricing -->

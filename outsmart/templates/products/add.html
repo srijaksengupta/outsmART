@@ -1,6 +1,17 @@
 {% extends 'base.html' %}
 {% block content %}
 
+<ul class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+</ul>
+
 <div class="col-md-6 m-auto">
   <div class="card text-left mb-3">
     <div class="card-header bg-info text-light"> <i class="fas fa-plus-square"></i> Add a Product</div>
