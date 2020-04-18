@@ -32,7 +32,7 @@
     {% if user.is_authenticated %}
     <div class="navbar-nav">
       <a class="btn btn-danger" style="margin-right: 10px;"  href="{% url 'products:wishlist' %}"><i class="fas fa-heart"></i> Wishlist</a>
-      <a class="btn btn-dark" href="{% url 'products:cart' %}"> <i class="fas fa-shopping-basket"></i> Cart</a>
+      <a class="btn btn-dark" href="{% url 'products:order_summary' %}"> <i class="fas fa-shopping-basket"></i> Cart</a>
 
       <a class="nav-item nav-link" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i> Logout {{user.username}}</a>
 

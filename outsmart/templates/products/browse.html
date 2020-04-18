@@ -5,6 +5,16 @@
 
 <link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
 
+<ul class="messages">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message }}
+            </div>
+        {% endfor %}
+</ul>
 
 <div class="card text-center mb-3">
   <div class="card-body">
@@ -38,7 +48,7 @@
     <h4><a href="{% url 'products:detail' p.id %}">{{p.title}}</a></h4>
     <p>{{p.summary}}</p>
     <div class="product-bottom-details">
-      <div class="product-price">£{{p.price}}</div>
+      <div class="product-price">${{p.price|floatformat:2}}</div>
       <div class="product-links">
           <form>
            {% csrf_token %}
