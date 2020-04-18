@@ -51,17 +51,29 @@ class Order(models.Model):
         return self.items.all()
 
     def get_cart_total(self):
-        return sum([item.product.price*item.quantity for item in self.items.all()])
+        if sum([item.product.price*item.quantity for item in self.items.all()]):
+            return sum([item.product.price*item.quantity for item in self.items.all()])
+        else:
+            return None
 
     def get_tax(self):
-        return round(0.1*sum([item.product.price*item.quantity for item in self.items.all()]))
+        if sum([item.product.price*item.quantity for item in self.items.all()]):
+            return round(0.1*sum([item.product.price*item.quantity for item in self.items.all()]))
+        else:
+            return None
 
     def get_shipping_charges(self):
-        return 20.0
+        if sum([item.product.price * item.quantity for item in self.items.all()]):
+            return 20.0
+        else:
+            return None
 
     def get_cart_total_plus_tax_plus_shipping(self):
-        return sum([item.product.price*item.quantity for item in self.items.all()]) + \
-               round(0.1*sum([item.product.price*item.quantity for item in self.items.all()])) + 20.0
+        if sum([item.product.price * item.quantity for item in self.items.all()]):
+            return sum([item.product.price*item.quantity for item in self.items.all()]) + \
+                   round(0.1*sum([item.product.price*item.quantity for item in self.items.all()])) + 20.0
+        else:
+            return None
 
     def __str__(self):
         return '{0} - {1}'.format(self.owner, self.ref_code)
