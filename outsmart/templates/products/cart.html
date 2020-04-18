@@ -97,7 +97,7 @@
                                 {% endif %}
                             <li class="d-flex justify-content-between py-3 border-bottom">
                                 <strong class="text-muted">Shipping charges</strong>
-                                {% if order.get_cart_total != None %}
+                                {% if order.get_shipping_charges != None %}
                                     <strong>${{order.get_shipping_charges|floatformat:2}}</strong></li>
                                 {% endif %}
                             <li class="d-flex justify-content-between py-3 border-bottom">
@@ -106,7 +106,7 @@
                                     <strong>${{order.get_tax|floatformat:2}}</strong></li>
                                 {% endif %}
                             <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Order Total</strong>
-                                {% if order.get_cart_total != None %}
+                                {% if order.get_cart_total_plus_tax_plus_shipping != None %}
                                     <h5 class="font-weight-bold">${{ order.get_cart_total_plus_tax_plus_shipping|floatformat:2 }}</h5>
                                 {% endif %}
                             </li>
