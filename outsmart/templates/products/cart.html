@@ -19,7 +19,7 @@
 
 <div class="px-4 px-lg-0">
     <div>
-        <h1 style="font-family: 'Serif'; text-align: center;"> Shopping Cart <a href="{% url 'products:browse' %}" class="btn btn-info rounded-pill border-0" style="background-color: goldenrod">Continue Shopping</a></h1>
+        <h1 style="font-family: 'Serif'; text-align: center;"> Shopping Cart <a href="{% url 'products:browse' %}" class="btn btn-info rounded-pill border-0" style="background-color: goldenrod">Continue Shopping <span style="content: '\27BE'; size: A5">&#10174;</span></a></h1>
     </div>
     <br>
 
@@ -58,7 +58,11 @@
                                     </div>
                                 </th>
                                 <td class="border-1 align-middle"><strong>${{ item.product.price|floatformat:2 }}</strong></td>
+                                {% if item.quantity > item.product.stock %}
+                                <td class="border-1 align-middle"><strong><a href="" class="btn btn-info border-0 disabled" style="">Out of Stock</a></strong></td>
+                                {% else %}
                                 <td class="border-1 align-middle"><strong>{{ item.quantity }} <a href="{% url 'products:edit_item' item_id=item.id %}" class="text-dark"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></strong></td>
+                                {% endif %}
                                 <td class="border-1 align-middle"><a href="{% url 'products:delete_item' item_id=item.id %}" class="text-dark"><i class="fa fa-trash"></i></a></td>
                             </tr>
                             {% empty %}

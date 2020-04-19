@@ -184,13 +184,24 @@ def edit_item(request, item_id):
 @login_required()
 def checkout(request, **kwargs):
     existing_order = get_user_pending_order(request)
-    amount = existing_order.get_cart_total_plus_tax_plus_shipping() * 100
-    context = {
-        'order': existing_order,
-        'key': settings.STRIPE_PUBLISHABLE_KEY,
-        'amount': amount
-    }
-    return render(request, 'products/checkout.html', context)
+    flag = False
+    order_items = existing_order.items.all()
+    for item in order_items:
+        item_qty = item.quantity
+        prod_stock = item.product.stock
+        if item_qty > prod_stock:
+            flag = True
+    if not flag:
+        amount = existing_order.get_cart_total_plus_tax_plus_shipping() * 100
+        context = {
+            'order': existing_order,
+            'key': settings.STRIPE_PUBLISHABLE_KEY,
+            'amount': amount
+        }
+        return render(request, 'products/checkout.html', context)
+    else:
+        messages.error(request, 'Some of the items in the cart are out of stock, please remove them to proceed')
+        return redirect('products:order_summary')
 
 
 @login_required
