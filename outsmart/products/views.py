@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import ProductPost, Order, OrderItem, Transaction
 from .models import Wishlist
-from .forms import ProductPostForm, OrderItemForm
+from .forms import ProductPostForm, OrderItemForm, OrderForm
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
@@ -87,6 +87,7 @@ def my_listings(request):
     context = {'products': ProductPost.objects.filter(owner=request.user)}
     return render(request, 'products/listings.html',context)
 
+
 # Create your views here.
 def detail(request, product_id):
     try:
@@ -99,6 +100,7 @@ def detail(request, product_id):
 @login_required
 def my_cart(request):
     return render(request, 'products/cart.html')
+
 
 @login_required()
 def add_to_cart(request, **kwargs):
@@ -249,6 +251,37 @@ def update_transaction_records(request, token):
     # look at tutorial on how to send emails with sendgrid
     messages.success(request, "Thank you! Your purchase was successful!")
     return redirect(reverse('products:browse'))
+
+
+@login_required
+def update_address(request):
+    template = 'products/address.html'
+    order_to_purchase = get_user_pending_order(request)
+    amount = order_to_purchase.get_cart_total_plus_tax_plus_shipping() * 100
+    if request.method == 'POST':
+        form = OrderForm(request.POST, instance=order_to_purchase)
+        try:
+            if form.is_valid():
+                order_to_purchase.address_filled = True
+                order_to_purchase.save()
+                form.save()
+                context = {'order': order_to_purchase,
+                           'key': settings.STRIPE_PUBLISHABLE_KEY,
+                           'amount': amount}
+                messages.success(request, 'Shipping/Billing Address updated successfully')
+                return redirect('products:checkout')
+
+        except Exception as e:
+            # messages.error(request, 'Shipping/Billing Address update failed')
+            messages.error(request, e)
+    else:
+        form = OrderForm(instance=order_to_purchase)
+    context = {
+        'form': form,
+        'order': order_to_purchase,
+    }
+    return render(request, template, context)
+
 
 
 @login_required
