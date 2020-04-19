@@ -46,6 +46,13 @@ class Order(models.Model):
     is_ordered = models.BooleanField(default=False)
     items = models.ManyToManyField(OrderItem)
     date_ordered = models.DateTimeField(auto_now=True)
+    name = models.CharField(max_length=100)
+    address = models.TextField(max_length=10000)
+    city = models.CharField(max_length=30)
+    state = models.CharField(max_length=30)
+    country = models.CharField(max_length=30)
+    address_filled = models.BooleanField(default=False)
+
 
     def get_cart_items(self):
         return self.items.all()

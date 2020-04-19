@@ -22,4 +22,5 @@ urlpatterns = [
     url(r'^checkout/$', views.checkout, name='checkout'),
     url(r'^charge/$', views.charge, name='charge'),
     url(r'^update-transaction/(?P<token>[-\w]+)/$', views.update_transaction_records, name='update_records'),
+    url(r'^update-address/$', views.update_address, name='update_address'),
 ]

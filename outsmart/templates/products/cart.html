@@ -1,4 +1,9 @@
 {% extends 'base.html' %}
+
+{% block title %}
+    Cart
+{% endblock %}
+
 {% block content %}
 
 <ul class="messages">
@@ -111,7 +116,11 @@
                                 {% endif %}
                             </li>
                         </ul>
-                        <a href="{% url 'products:checkout' %}" class="btn btn-dark rounded-pill py-2 btn-block">Proceed to checkout</a>
+                        {% if order.get_cart_total_plus_tax_plus_shipping != None%}
+                            <a href="{% url 'products:checkout' %}" class="btn btn-dark rounded-pill py-2 btn-block">Proceed to checkout</a>
+                        {% else %}
+                            <a href="{% url 'products:checkout' %}" class="btn btn-dark rounded-pill py-2 btn-block disabled">Proceed to checkout</a>
+                        {% endif %}
                     </div>
                 </div>
             </div>
