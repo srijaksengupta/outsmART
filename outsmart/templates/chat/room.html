@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Room
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'chat/chatstyle.css' %}" type="text/css">
+
+
+<main class="chat-container">
+    <div class="card-header bg-info text-light"> <i class="fas fa-comments"></i> {{ room_name }}'s chatroom</div>
+    <div class="card-body">
+        <div id="table-wrapper">
+        <div id="table-scroll">
+            <table id="chat-log">
+                {% for msg in msgs %}
+                    {% if msg.sender == room_name %}
+                        <tr><th style="background-color: #90ee90;">{{msg.content}}</th></tr>
+                    {% else %}
+                        <tr><th>{{msg.content}}</th></tr>
+                    {% endif %}
+                {% endfor %}
+
+                <script>        
+                    var element = document.getElementById("table-scroll");
+                    element.scrollTop = element.scrollHeight;
+                </script>
+
+            </table><br/>
+        </div>
+        </div>
+        <input id="chat-message-input" type="text" size="100"/><br/>
+        <input id="chat-message-submit" type="button" class="btn btn-success" value="Send"/>
+    </div>
+</main>
+
+
+
+<script>
+    var roomName = "{{ room_name }}";
+
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/chat/' + roomName + '/');
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        var username = data['username'];
+
+        var table = document.getElementById("chat-log");
+        var row = table.insertRow(-1);
+
+        var cell1 = row.insertCell(0);
+        cell1.innerHTML = message;
+        if(username == roomName ){
+            row.style.backgroundColor = "#90ee90";  
+        }
+        var element = document.getElementById("table-scroll");
+        element.scrollTop = element.scrollHeight;
+
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.getElementById('chat-message-input').focus();
+    document.getElementById('chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            document.getElementById('chat-message-submit').click();
+        }
+    };
+
+    document.getElementById('chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.getElementById('chat-message-input');
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+        messageInputDom.value = '';
+    };
+
+
+</script>
+
+
+{% endblock %}

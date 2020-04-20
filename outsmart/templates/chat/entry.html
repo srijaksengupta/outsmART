@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Entry
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+<link rel="stylesheet" href="{% static 'chat/chatstyle.css' %}" type="text/css">
+
+<main class="chat-container">
+      <div class="card-header bg-info text-light"> <i class="fas fa-comments"></i> Enter a chatroom</div>
+      <div class="card-body">
+        <input id="room-name-input" type="text" size="100" /><br/>
+        <input id="room-name-submit" type="button" class="btn btn-success" value="Enter"/>
+        
+      </div>
+</main>
+
+
+
+    <script>
+        document.getElementById('room-name-input').focus();
+        document.getElementById('room-name-input').onkeyup = function(e) {
+            if (e.keyCode === 13) {  // enter, return
+                document.getElementById('room-name-submit').click();
+            }
+        };
+
+        document.getElementById('room-name-submit').onclick = function(e) {
+            var roomName = document.getElementById('room-name-input').value;
+            window.location.pathname = '/chat/' + roomName + '/';
+        };
+
+        
+    </script>
+
+
+{% endblock %}

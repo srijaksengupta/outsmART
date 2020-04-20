@@ -12,6 +12,17 @@
         <a class="nav-item nav-link" href="{% url 'products:browse' %}">Browse Products</a>
 
         {% if user.is_authenticated %}
+        <div class= "nav-item nav-link" >
+          <div class="dropdown">
+            <div class="dropbtn"> Chat</div>
+            <div class="dropdown-content">
+              <a href="{% url 'chat:room' user.username %}">My Chatroom</a>
+              <a href="{% url 'chat:entry' %}">Join a Chatroom</a>
+            </div>
+          </div>
+        </div>
+
+
         <a class="nav-item nav-link" href="#">My Orders</a>
         <div class= "nav-item nav-link" >
           <div class="dropdown">
@@ -23,6 +34,8 @@
             </div>
           </div>
         </div>
+
+
         {% endif %}
 
 

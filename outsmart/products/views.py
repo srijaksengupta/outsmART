@@ -81,13 +81,7 @@ def delete_products(request, pk):
         'product': product,
     }
     return render(request, template, context)
-
-@login_required
-def my_listings(request):
-    context = {'products': ProductPost.objects.filter(owner=request.user)}
-    return render(request, 'products/listings.html',context)
-
-
+    
 # Create your views here.
 def detail(request, product_id):
     try:
