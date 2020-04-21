@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import ProductPost, Order, OrderItem, Transaction
 from .models import Wishlist
-from .forms import ProductPostForm, OrderItemForm, OrderForm
+from .forms import ProductPostForm, OrderItemForm, OrderForm, SearchForm
 from django.contrib.auth.decorators import login_required
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render, reverse
@@ -10,6 +10,8 @@ from .extras import generate_order_id
 from django.conf import settings
 import datetime
 from django.views.generic import TemplateView, FormView, CreateView, UpdateView, DeleteView
+from django.db.models import Q
+
 
 # Stripe related imports
 import stripe
@@ -18,8 +20,35 @@ stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # Create your views here.
 def browse_products(request):
-    context = {'products': ProductPost.objects.all()}
+    if request.method == 'POST':
+        form = SearchForm(request.POST)
+        if form.is_valid():
+            data = form.cleaned_data
+            search = data['search']
+            sortBy = data['sortBy']
+            minPrice = data['minPrice']
+            maxPrice = data['maxPrice']   
+
+            if(search==""):
+                products = ProductPost.objects.filter(price__lte=maxPrice,price__gte=minPrice).order_by('-sold')
+            else:
+                products = ProductPost.objects.filter(Q(title__icontains=search)|Q(tags__icontains=search),price__lte=maxPrice,price__gte=minPrice)
+            
+            if(sortBy=='Relevance'):
+                products = products.order_by('-sold')
+            elif (sortBy=='Newest'):
+                products = products.order_by('-created')
+            elif (sortBy=='Oldest'):
+                products = products.order_by('created')
+        else:
+            messages.error(request, 'Product search failed')
+            products = ProductPost.objects.all()
+    else:   
+        form = SearchForm()
+        products = ProductPost.objects.all().order_by('-sold')
+    context = {'products': products,'form': form}
     return render(request,'products/browse.html',context)
+
 
 @login_required
 def add_products(request):
@@ -81,13 +110,7 @@ def delete_products(request, pk):
         'product': product,
     }
     return render(request, template, context)
-
-@login_required
-def my_listings(request):
-    context = {'products': ProductPost.objects.filter(owner=request.user)}
-    return render(request, 'products/listings.html',context)
-
-
+    
 # Create your views here.
 def detail(request, product_id):
     try:
@@ -236,6 +259,7 @@ def update_transaction_records(request, token):
     # update the placed order
     order_to_purchase.is_ordered = True
     order_to_purchase.date_ordered = datetime.datetime.now()
+    order_to_purchase.total = order_to_purchase.get_cart_total_plus_tax_plus_shipping()
     order_to_purchase.save()
 
     # get all items in the order - generates a queryset
@@ -247,6 +271,8 @@ def update_transaction_records(request, token):
     for item in order_items:
         order_item_product = item.product
         order_item_product.stock -= item.quantity
+        order_item_product.sold += item.quantity
+        order_item_product.revenue += item.quantity*item.product.price
         order_item_product.save()
 
     # create a transaction
@@ -300,7 +326,7 @@ def my_wishlist(request):
     context = {'products': Wishlist.objects.filter(owner=request.user)}
     return render(request,'products/wishlist.html',context)
 
-
+@login_required
 def add_wishlist(request):
     if request.method == 'POST':
         productID = request.POST['product']
@@ -310,3 +336,30 @@ def add_wishlist(request):
             p = Wishlist(owner=request.user, product=productAdd)
             p.save()
         return HttpResponse('')
+
+@login_required
+def remove_wishlist(request):
+    if request.method == 'POST':
+        productID = request.POST['product']
+        productRemove = ProductPost.objects.get(pk=productID)
+        Wishlist.objects.filter(owner=request.user,product=productRemove).delete()
+        return HttpResponse('')
+
+@login_required
+def my_orders(request):
+    context = {'orders': Order.objects.filter(owner=request.user,is_ordered=True).order_by('-date_ordered')}
+    return render(request, 'products/my_orders.html',context)
+
+@login_required
+def manage_orders(request):
+    orders = Order.objects.filter(is_ordered=True).order_by('-date_ordered')
+    sold_items = [] 
+    for order in orders:
+        items = order.items.all()
+        for item in items:
+            if item.product.owner == request.user:
+                sold_items.append(order)
+
+    context = {'orders': sold_items}
+    return render(request, 'products/manage_orders.html',context)
+

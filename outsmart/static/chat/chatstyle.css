@@ -1,0 +1,31 @@
+/* CSS for the product listings */
+.chat-container {
+    max-width: 80%;
+    box-shadow: 0 2px 7px #dfdfdf;
+    background: #fafafa;
+    margin: auto auto 40px auto;
+  }
+
+  .card-body input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  #table-wrapper {
+    width: 100%;
+    position:relative;
+  }
+  #table-scroll {
+    height:300px;
+    overflow:auto;  
+    margin-top:10px;
+  }
+  #table-wrapper table {
+    width:100%;
+
+  
+  }
+
+  th, td {
+    font-weight: normal;
+  }

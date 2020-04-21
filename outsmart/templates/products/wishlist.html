@@ -26,25 +26,45 @@
                                     <img class="img-responsive" src="{{p.product.image.url}}" alt="prewiew" width="120" height="80">
                             </div>
                             <div class="col-12 text-sm-center col-sm-12 text-md-left col-md-6">
-                                <h4 class="product-name"><strong>{{p.product.title}}</strong></h4>
+                                <h4 class="product-name"><strong><a href="{% url 'products:detail' p.product.id %}">{{p.product.title}}</a></strong></h4>
                                 <h4>
                                     <small>{{p.product.summary}}</small>
                                 </h4>
                             </div>
                             
-                            <div class="col-md-4 text-right">
-                                <button type="button" class="btn btn-outline-danger btn-xs">
-                                    <i class="fa fa-trash" aria-hidden="true"></i>
-                                </button>
+                            <div class="col-sm-4 text-center">
+                            <form>
+                                {% csrf_token %}
+                                <button onclick='removeWishlist("{{p.product.id}}")' class="btn btn-danger" name="product" ><i class="fa fa-trash"></i></button>
+                            </form>
                             </div>
                         </div>
                      </div>
                 {% endfor %}
-
                      
              </div>
          </div>
  </div>
 
+
+
+ <script type="text/javascript">
+
+    function removeWishlist(value) {
+        link = "{% url 'products:remove_wishlist' %}";
+        $.ajax({
+          type:'POST',
+          url: link,
+          data:{
+            product: value,
+            csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+          },
+          success: function(){
+          }
+        });
+    }  
+</script>
+    
+    
 
 {% endblock %}

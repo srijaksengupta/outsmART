@@ -23,19 +23,13 @@
 
 <div class="card text-center mb-3">
   <div class="card-body">
-    <input type="text" class="form-control mb-3" placeholder="Search for products" />
 
-    <div class="input-group mb-3">
-      <div class="input-group-prepend">
-        <label class="input-group-text" for="inputGroupSelect01">Sort By</label>
-      </div>
-      <select class="custom-select" id="inputGroupSelect01">
-        <option selected>Choose...</option>
-        <option value="1">Relevance</option>
-        <option value="2">Rating</option>
-        <option value="3">Newest</option>
-      </select>
-    </div>
+    <form action="" method="POST" enctype="multipart/form-data" >
+      {% csrf_token %}
+      {{ form }}
+      <button type="submit">Submit</button>
+    </form>
+
   </div>
 </div>
 
@@ -58,7 +52,6 @@
           <form>
            {% csrf_token %}
            <button onclick='addWishlist("{{p.id}}")' class="btn btn-danger" name="product" ><i class="fas fa-heart"></i></button>
-            <button type="submit" class="btn btn-dark"><i class="fas fa-shopping-basket"></i></button>
         </form>
       </div>
     </div>
