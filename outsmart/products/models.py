@@ -1,4 +1,6 @@
 from django.db import models
+from django.utils.timezone import now
+
 from django.contrib.auth.models import User
 from django.core.validators import MaxValueValidator, MinValueValidator
 
@@ -23,7 +25,8 @@ class ProductPost(models.Model):
             MinValueValidator(0)
         ])
     sold = models.IntegerField(default=0)
-    revenue = models.DecimalField(default=0,max_digits=10, decimal_places=2)
+    revenue = models.FloatField(max_length=10,default= 0.00)
+    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return 'Product: {} by {}'.format(self.title,self.owner)
@@ -52,7 +55,7 @@ class Order(models.Model):
     state = models.CharField(max_length=30)
     country = models.CharField(max_length=30)
     address_filled = models.BooleanField(default=False)
-
+    total = models.DecimalField(default=0.00,decimal_places=2,max_digits=10)
 
     def get_cart_items(self):
         return self.items.all()
@@ -66,7 +69,8 @@ class Order(models.Model):
 
     def get_tax(self):
         if sum([item.product.price*item.quantity for item in self.items.all()]):
-            return round(0.1*sum([item.product.price*item.quantity for item in self.items.all()]))
+            total = round(0.1*sum([item.product.price*item.quantity for item in self.items.all()]))
+            return total
         else:
             return None
 
@@ -78,6 +82,7 @@ class Order(models.Model):
 
     def get_cart_total_plus_tax_plus_shipping(self):
         if sum([item.product.price * item.quantity for item in self.items.all()]):
+
             return sum([item.product.price*item.quantity for item in self.items.all()]) + \
                    round(0.1*sum([item.product.price*item.quantity for item in self.items.all()])) + 20.0
         else:

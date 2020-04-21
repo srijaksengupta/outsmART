@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    Product Listing
+{% endblock %}
+
+{% block content %}
+
+{% load static %}
+
+<link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
+
+
+{% for order in orders %}
+
+<div class="order">
+
+<div class="order-header">
+  <h1> Order Ref: {{order.ref_code}} on {{order.date_ordered}}</h1>
+</div>
+
+{% for item in order.items.all %}
+
+<main class="listing-container">
+
+  <!-- Left Column / Headphones Image -->
+  <div class="listing-left-column">
+    <img src="{{item.product.image.url}}" alt="" class="">
+  </div>
+ 
+  <!-- Right Column -->
+  <div class="listing-right-column">
+    <!-- Product Pricing -->
+    <div class="listing-statistics">
+          <p><b>PRODUCT ID:</b> {{item.product.id}} </p>
+          <p><b>Name:</b> {{item.product.title}} </p>
+          <p><b>Quantity:</b> {{item.quantity}} </p>
+    </div>
+
+        <!-- Product Pricing -->
+      <div class="listing-controls">
+        <a href="{% url 'products:detail' item.product.id %}" class="btn btn-primary">View</a>
+      </div>
+  </div>
+
+</main>
+{% endfor %}
+
+<div class="order-footer">
+  <h1> Order Total: ${{order.total}}</h1>
+</div>
+
+</div>
+
+
+{% endfor %}
+
+
+{% endblock %}

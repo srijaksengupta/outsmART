@@ -23,14 +23,14 @@
         </div>
 
 
-        <a class="nav-item nav-link" href="#">My Orders</a>
+        <a class="nav-item nav-link" href="{% url 'products:orders' %}">My Orders</a>
         <div class= "nav-item nav-link" >
           <div class="dropdown">
             <div class="dropbtn"> Control Panel</div>
             <div class="dropdown-content">
               <a href="{% url 'products:add' %}">Add Products</a>
               <a href="{% url 'products:listings' %}">View Listings</a>
-              <a href="#">Manage Messages</a>
+              <a href="{% url 'products:manage_orders' %}">Manage Orders</a>
             </div>
           </div>
         </div>
