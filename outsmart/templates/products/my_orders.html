@@ -32,18 +32,21 @@
   <div class="listing-right-column">
     <!-- Product Pricing -->
     <div class="listing-statistics">
-          <p><b>PRODUCT ID:</b> {{item.product.id}} </p>
-          <p><b>Name:</b> {{item.product.title}} </p>
-          <p><b>Quantity:</b> {{item.quantity}} </p>
+        {% if item.product.id == None %}
+        <p><b>PRODUCT ID:</b> Product was deleted </p>
+        <p><b>Name:</b> Product was deleted </p>
+        <p><b>Quantity:</b> Product was deleted </p>
+        {% else %}
+        <p><b>PRODUCT ID:</b> {{item.product.id}} </p>
+        <p><b>Name:</b> {{item.product.title}} </p>
+        <p><b>Quantity:</b> {{item.quantity}} </p>
+        {% endif %}
     </div>
 
-        <!-- Product Pricing -->
-      <div class="listing-controls">
-        <a href="{% url 'products:detail' item.product.id %}" class="btn btn-primary">View</a>
-      </div>
   </div>
 
 </main>
+
 {% endfor %}
 
 <!-- Order total -->
