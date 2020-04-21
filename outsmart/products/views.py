@@ -35,7 +35,7 @@ def browse_products(request):
                 products = ProductPost.objects.filter(Q(title__icontains=search)|Q(tags__icontains=search),price__lte=maxPrice,price__gte=minPrice)
             
             if(sortBy=='Relevance'):
-                products = products.order_by('sold')
+                products = products.order_by('-sold')
             elif (sortBy=='Newest'):
                 products = products.order_by('-timestamp')
             elif (sortBy=='Oldest'):
