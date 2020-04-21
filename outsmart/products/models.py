@@ -21,7 +21,6 @@ class ProductPost(models.Model):
     price = models.FloatField(max_length=10, default=0.00)
     sold = models.IntegerField(default=0)
     revenue = models.FloatField(max_length=10,default= 0.00)
-    timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return 'Product: {} by {}'.format(self.title,self.owner)

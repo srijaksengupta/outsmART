@@ -37,9 +37,9 @@ def browse_products(request):
             if(sortBy=='Relevance'):
                 products = products.order_by('-sold')
             elif (sortBy=='Newest'):
-                products = products.order_by('-timestamp')
+                products = products.order_by('-created')
             elif (sortBy=='Oldest'):
-                products = products.order_by('timestamp')
+                products = products.order_by('created')
         else:
             messages.error(request, 'Product search failed')
             products = ProductPost.objects.all()
