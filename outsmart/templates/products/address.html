@@ -6,17 +6,19 @@
 
 {% block content %}
 
+<!-- Display error messages --> 
 <ul class="messages">
-        {% for message in messages %}
-            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {{ message }}
-            </div>
-        {% endfor %}
+    {% for message in messages %}
+    <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ message }}
+    </div>
+    {% endfor %}
 </ul>
 
+<!-- Form for shipping address --> 
 <div class="col-md-6 m-auto">
     <div class="card text-left mb-3">
         <div class="card-header bg-info text-light"> <i class="fa fa-pencil-square-o" aria-hidden="true"></i> Update Shipping/Billing Address </div>
@@ -58,12 +60,6 @@
                         <br>
                         {{form.country}}
                     </div>
-<!--                    <div class="form-group">-->
-<!--                        {{form.address_filled.errors}}-->
-<!--                        <label for="address_filled">Address Filled Flag:</label>-->
-<!--                        <br>-->
-<!--                        {{form.address_filled}}-->
-<!--                    </div>-->
                 <button class="btn btn-success" type="submit">Save</button>
             </form>
         </div>

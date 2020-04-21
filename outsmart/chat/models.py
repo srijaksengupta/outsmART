@@ -61,7 +61,7 @@ class ChatMessage(models.Model):
     message     = models.TextField()
     timestamp   = models.DateTimeField(auto_now_add=True)
 
-
+# Messages stored on the database
 class Message(models.Model):
     roomName = models.TextField()
     content = models.TextField()

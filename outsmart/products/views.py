@@ -18,7 +18,7 @@ import stripe
 from stripe import error
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
-# Create your views here.
+# View for browsing products
 def browse_products(request):
     if request.method == 'POST':
         form = SearchForm(request.POST)
@@ -30,10 +30,13 @@ def browse_products(request):
             maxPrice = data['maxPrice']   
 
             if(search==""):
+                # Default search by relevance
                 products = ProductPost.objects.filter(price__lte=maxPrice,price__gte=minPrice).order_by('-sold')
             else:
+                # Search products by product title or tags, filter by price
                 products = ProductPost.objects.filter(Q(title__icontains=search)|Q(tags__icontains=search),price__lte=maxPrice,price__gte=minPrice)
             
+            # Different sorting options
             if(sortBy=='Relevance'):
                 products = products.order_by('-sold')
             elif (sortBy=='Newest'):
@@ -49,12 +52,13 @@ def browse_products(request):
     context = {'products': products,'form': form}
     return render(request,'products/browse.html',context)
 
-
+# View for adding products
 @login_required
 def add_products(request):
     if request.method == 'POST':
         form = ProductPostForm(request.POST, request.FILES)
         if form.is_valid():
+            # Create an product object in the database
             inst = form.save(commit=False)
             inst.owner = request.user
             inst.save()
@@ -64,11 +68,13 @@ def add_products(request):
             messages.error(request, 'Product addition failed')
     return render(request, 'products/add.html')
 
+# Show products created by logged user
 @login_required
 def my_listings(request):
     context = {'products': ProductPost.objects.filter(owner=request.user)}
     return render(request, 'products/listings.html',context)
 
+# Allow user to edit the products in listings
 @login_required
 def edit_products(request, pk):
     template = 'products/modify.html'
@@ -91,6 +97,7 @@ def edit_products(request, pk):
     }
     return render(request, template, context)
 
+# Allow user to delete the products in listings
 @login_required
 def delete_products(request, pk):
     template = 'products/delete.html'
@@ -111,14 +118,13 @@ def delete_products(request, pk):
     }
     return render(request, template, context)
     
-# Create your views here.
+# Show the product page
 def detail(request, product_id):
     try:
         product = ProductPost.objects.get(pk=product_id)
     except ProductPost.DoesNotExist:
         raise Http404("Product does not exist")
     return render(request,'products/detail.html',{'product': product})
-
 
 @login_required
 def my_cart(request):
@@ -147,7 +153,7 @@ def add_to_cart(request, **kwargs):
     messages.success(request, "Item added to cart successfully")
     return redirect('products:browse')
 
-
+# Delete product from the cart
 @login_required()
 def delete_from_cart(request, item_id):
     item_to_delete = OrderItem.objects.filter(pk=item_id)
@@ -167,7 +173,7 @@ def get_user_pending_order(request):
         return order[0]
     return 0
 
-
+# Show the current order in the cart
 @login_required()
 def order_details(request, **kwargs):
     existing_order = get_user_pending_order(request)
@@ -176,6 +182,7 @@ def order_details(request, **kwargs):
     }
     return render(request, 'products/cart.html', context)
 
+# Allow user to change the quantity of the item
 @login_required
 def edit_item(request, item_id):
     template = 'products/edit_item.html'
@@ -186,6 +193,7 @@ def edit_item(request, item_id):
             if form.is_valid():
                 data = form.cleaned_data
                 quantity = data['quantity']
+                #Check if you have enough stock
                 if quantity <= item.product.stock:
                     form.save()
                     messages.success(request, 'Item quantity updated successfully')
@@ -203,18 +211,20 @@ def edit_item(request, item_id):
     }
     return render(request, template, context)
 
-
+# Check if you can proceed to shipping
 @login_required()
 def checkout(request, **kwargs):
     existing_order = get_user_pending_order(request)
     flag = False
     order_items = existing_order.items.all()
+    #Check if the product stock has changed
     for item in order_items:
         item_qty = item.quantity
         prod_stock = item.product.stock
         if item_qty > prod_stock:
             flag = True
     if not flag:
+        #Proceed to checkout
         amount = existing_order.get_cart_total_plus_tax_plus_shipping() * 100
         context = {
             'order': existing_order,
@@ -226,13 +236,14 @@ def checkout(request, **kwargs):
         messages.error(request, 'Some of the items in the cart are out of stock, please remove them to proceed')
         return redirect('products:order_summary')
 
-
+# Payment method
 @login_required
 def charge(request):
     existing_order = get_user_pending_order(request)
     token = request.POST.get('stripeToken', False)
     if request.method == 'POST':
         try:
+            # Create a stripe API charge object
             charge = stripe.Charge.create(
                 amount=int(100 * existing_order.get_cart_total_plus_tax_plus_shipping()),
                 currency='inr',
@@ -289,7 +300,7 @@ def update_transaction_records(request, token):
     messages.success(request, "Thank you! Your purchase was successful!")
     return redirect(reverse('products:browse'))
 
-
+# Shipping address for payment
 @login_required
 def update_address(request):
     template = 'products/address.html'
@@ -320,23 +331,27 @@ def update_address(request):
     return render(request, template, context)
 
 
-
+# Display all items in users wishlist
 @login_required
 def my_wishlist(request):
     context = {'products': Wishlist.objects.filter(owner=request.user)}
     return render(request,'products/wishlist.html',context)
 
+# Add items to wishlist
 @login_required
 def add_wishlist(request):
     if request.method == 'POST':
+        # Get the product that user has wished for
         productID = request.POST['product']
         productAdd = ProductPost.objects.get(pk=productID)
 
+        # Add the product to the wishlist
         if Wishlist.objects.filter(owner=request.user,product=productAdd).count() == 0:
             p = Wishlist(owner=request.user, product=productAdd)
             p.save()
         return HttpResponse('')
 
+#Remove item from wishlist
 @login_required
 def remove_wishlist(request):
     if request.method == 'POST':
@@ -345,15 +360,18 @@ def remove_wishlist(request):
         Wishlist.objects.filter(owner=request.user,product=productRemove).delete()
         return HttpResponse('')
 
+# Show the orders that the user has done
 @login_required
 def my_orders(request):
     context = {'orders': Order.objects.filter(owner=request.user,is_ordered=True).order_by('-date_ordered')}
     return render(request, 'products/my_orders.html',context)
 
+# Show the items the seller has sold
 @login_required
 def manage_orders(request):
     orders = Order.objects.filter(is_ordered=True).order_by('-date_ordered')
     sold_items = [] 
+    # Check if an order has an item by the logged in seller
     for order in orders:
         items = order.items.all()
         for item in items:

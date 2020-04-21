@@ -6,9 +6,12 @@ from django.contrib.auth.models import User
 from .models import Message
 
 class ChatConsumer(WebsocketConsumer):
+
+    # Connect to a room
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = 'chat_%s' % self.room_name
+
         # Join room group
         async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
@@ -24,8 +27,8 @@ class ChatConsumer(WebsocketConsumer):
 
         self.accept()
 
+    # Leave room group
     def disconnect(self, close_code):
-        # Leave room group
         async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
@@ -37,6 +40,7 @@ class ChatConsumer(WebsocketConsumer):
         message = text_data_json['message']
         user = self.scope['user']
 
+        # Show who sent the message
         if user.is_authenticated:
             message = user.username + ': ' + message
         else:

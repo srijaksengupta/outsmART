@@ -10,6 +10,7 @@
 
 <link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
 
+<!-- Display success/error messages --> 
 <ul class="messages">
         {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible" role="alert">
@@ -21,6 +22,7 @@
         {% endfor %}
 </ul>
 
+<!-- Searchbox for products -->
 <div class="card text-center mb-3">
   <div class="card-body">
 
@@ -29,56 +31,57 @@
       {{ form }}
       <button type="submit">Submit</button>
     </form>
-
   </div>
 </div>
 
+<!-- Display the products -->
 <div class="row">
+  {% for p in products %}
+  <div class="product-card">
+    <!-- Thumbnail -->
+    <div class="product-tumb">
+      <img src="{{p.image.url}}" alt="">
+    </div>
 
-{% for p in products %}
+    <!-- More product details -->
+    <div class="product-details">
+      <span class="product-catagory">{{p.tags}}</span>
+      <h4><a href="{% url 'products:detail' p.id %}">{{p.title}}</a></h4>
+      <p>{{p.summary}}</p>
 
-<div class="product-card">
-  <div class="badge">Hot</div>
-  <div class="product-tumb">
-    <img src="{{p.image.url}}" alt="">
-  </div>
-  <div class="product-details">
-    <span class="product-catagory">{{p.tags}}</span>
-    <h4><a href="{% url 'products:detail' p.id %}">{{p.title}}</a></h4>
-    <p>{{p.summary}}</p>
-    <div class="product-bottom-details">
-      <div class="product-price">${{p.price|floatformat:2}}</div>
-      <div class="product-links">
+      <div class="product-bottom-details">
+        <div class="product-price">${{p.price|floatformat:2}}</div>
+        <!-- Allow user to add to wishlist -->
+        <div class="product-links">
           <form>
-           {% csrf_token %}
-           <button onclick='addWishlist("{{p.id}}")' class="btn btn-danger" name="product" ><i class="fas fa-heart"></i></button>
-        </form>
+            {% csrf_token %}
+            <button onclick='addWishlist("{{p.id}}")' class="btn btn-danger" name="product" ><i class="fas fa-heart"></i></button>
+          </form>
+        </div>
+
       </div>
     </div>
   </div>
-</div>
-
-{% endfor %}
-
+  {% endfor %}
 </div> 
 
 
 <script type="text/javascript">
-
-function addWishlist(value) {
-    link = "{% url 'products:add_wishlist' %}";
-    $.ajax({
-      type:'POST',
-      url: link,
-      data:{
-        product: value,
-        csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
-      },
-      success: function(){
-        alert("Added product to wishlist");
-      }
-    });
-}  
+  // Add a product to wishlist without refresh
+  function addWishlist(value) {
+      link = "{% url 'products:add_wishlist' %}";
+      $.ajax({
+        type:'POST',
+        url: link,
+        data:{
+          product: value,
+          csrfmiddlewaretoken:$('input[name=csrfmiddlewaretoken]').val()
+        },
+        success: function(){
+          alert("Added product to wishlist");
+        }
+      });
+  }  
 </script>
 
 

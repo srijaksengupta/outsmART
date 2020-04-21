@@ -1,5 +1,5 @@
 
-
+<!-- Navigation --> 
 <nav class="navbar navbar-expand-lg navbar-dark bg-info text-white mb-4">
 
     <a class="navbar-brand" href="#">outsmART</a>
@@ -11,6 +11,7 @@
         <a class="nav-item nav-link" href="{% url 'pages:index' %}">Home</a>
         <a class="nav-item nav-link" href="{% url 'products:browse' %}">Browse Products</a>
 
+        <!-- Buttons shown if user logged in --> 
         {% if user.is_authenticated %}
         <div class= "nav-item nav-link" >
           <div class="dropdown">
@@ -21,7 +22,6 @@
             </div>
           </div>
         </div>
-
 
         <a class="nav-item nav-link" href="{% url 'products:orders' %}">My Orders</a>
         <div class= "nav-item nav-link" >
@@ -34,27 +34,21 @@
             </div>
           </div>
         </div>
-
-
         {% endif %}
-
-
       </div>
     </div>
 
     {% if user.is_authenticated %}
-    <div class="navbar-nav">
-      <a class="btn btn-danger" style="margin-right: 10px;"  href="{% url 'products:wishlist' %}"><i class="fas fa-heart"></i> Wishlist</a>
-      <a class="btn btn-dark" href="{% url 'products:order_summary' %}"> <i class="fas fa-shopping-basket"></i> Cart</a>
-
-      <a class="nav-item nav-link" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i> Logout {{user.username}}</a>
-
-    </div>
+      <div class="navbar-nav">
+        <a class="btn btn-danger" style="margin-right: 10px;"  href="{% url 'products:wishlist' %}"><i class="fas fa-heart"></i> Wishlist</a>
+        <a class="btn btn-dark" href="{% url 'products:order_summary' %}"> <i class="fas fa-shopping-basket"></i> Cart</a>
+        <a class="nav-item nav-link" href="{% url 'account:logout' %}"><i class="fas fa-sign-out-alt"></i> Logout {{user.username}}</a>
+      </div>
     {% else %}
-    <div class="navbar-nav">
-        <a class="nav-item nav-link" href="{% url 'account:login' %}">Login</a>
-        <a class="nav-item nav-link" href="{% url 'account:signup' %}">Register</a>
-    </div>
+      <div class="navbar-nav">
+          <a class="nav-item nav-link" href="{% url 'account:login' %}">Login</a>
+          <a class="nav-item nav-link" href="{% url 'account:signup' %}">Register</a>
+      </div>
     {% endif %}
 
 </nav>

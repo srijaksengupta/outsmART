@@ -7,8 +7,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 def get_upload_path(instance, filename):
     return 'user-' + str(instance.owner.id) + '/' + filename
 
-# Create your models here.
-
+# Model for a specific product
 class ProductPost(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
@@ -25,7 +24,7 @@ class ProductPost(models.Model):
     def __str__(self):
         return 'Product: {} by {}'.format(self.title,self.owner)
 
-
+# Model for an item in an order
 class OrderItem(models.Model):
     product = models.ForeignKey(ProductPost, on_delete=models.SET_NULL, null=True)
     is_ordered = models.BooleanField(default=False)
@@ -36,7 +35,7 @@ class OrderItem(models.Model):
     def __str__(self):
         return 'Product: {} by {} at {} qty {}'.format(self.product.title,self.product.owner, self.date_added, self.quantity)
 
-
+# Model for an order containing multiple items
 class Order(models.Model):
     ref_code = models.CharField(max_length=15)
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -51,16 +50,18 @@ class Order(models.Model):
     address_filled = models.BooleanField(default=False)
     total = models.DecimalField(default=0.00,decimal_places=2,max_digits=10)
 
+    # Get all the different products in an order
     def get_cart_items(self):
         return self.items.all()
 
+    # Get the price of all the items in the order
     def get_cart_total(self):
         if sum([item.product.price*item.quantity for item in self.items.all()]):
             return sum([item.product.price*item.quantity for item in self.items.all()])
         else:
             return None
 
-
+    # Calculate tax for all items
     def get_tax(self):
         if sum([item.product.price*item.quantity for item in self.items.all()]):
             total = round(0.1*sum([item.product.price*item.quantity for item in self.items.all()]))
@@ -68,12 +69,14 @@ class Order(models.Model):
         else:
             return None
 
+    # Calculate shipping for all items
     def get_shipping_charges(self):
         if sum([item.product.price * item.quantity for item in self.items.all()]):
             return 20.0
         else:
             return None
 
+    # Add all fees together
     def get_cart_total_plus_tax_plus_shipping(self):
         if sum([item.product.price * item.quantity for item in self.items.all()]):
 
@@ -85,7 +88,7 @@ class Order(models.Model):
     def __str__(self):
         return '{0} - {1}'.format(self.owner, self.ref_code)
 
-
+# Model for all the transactions
 class Transaction(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     token = models.CharField(max_length=120)
@@ -100,7 +103,7 @@ class Transaction(models.Model):
     class Meta:
         ordering = ['-timestamp']
 
-
+# Model for a wishlist containing products
 class Wishlist(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(ProductPost, on_delete=models.CASCADE)

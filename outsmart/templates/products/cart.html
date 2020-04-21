@@ -6,6 +6,7 @@
 
 {% block content %}
 
+<!-- Display success / error messages -->
 <ul class="messages">
         {% for message in messages %}
             <div class="alert {{ message.tags }} alert-dismissible" role="alert">
@@ -17,6 +18,7 @@
         {% endfor %}
 </ul>
 
+<!--Display shopping cart -->
 <div class="px-4 px-lg-0">
     <div>
         <h1 style="font-family: 'Serif'; text-align: center;"> Shopping Cart <a href="{% url 'products:browse' %}" class="btn btn-info rounded-pill border-0" style="background-color: goldenrod">Continue Shopping <span style="content: '\27BE'; size: A5">&#10174;</span></a></h1>
@@ -46,36 +48,39 @@
                                 </th>
                             </tr>
                             </thead>
+                            
+                            <!-- Display all products in the table -->
                             <tbody>
-                            {% for item in order.get_cart_items %}
-                            <tr>
-                                <th scope="row" class="border-1">
-                                    <div class="p-2">
-                                        <img src="{{ item.product.image.url }}" alt="" width="120" class="img-fluid rounded shadow-sm">
-                                        <div class="ml-3 d-inline-block align-middle">
-                                            <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">{{ item.product.title }}</a></h5><span class="text-muted font-weight-normal font-italic d-block">Category: {{ item.product.tags }}</span>
+                                {% for item in order.get_cart_items %}
+                                <tr>
+                                    <th scope="row" class="border-1">
+                                        <div class="p-2">
+                                            <img src="{{ item.product.image.url }}" alt="" width="120" class="img-fluid rounded shadow-sm">
+                                            <div class="ml-3 d-inline-block align-middle">
+                                                <h5 class="mb-0"> <a href="#" class="text-dark d-inline-block align-middle">{{ item.product.title }}</a></h5><span class="text-muted font-weight-normal font-italic d-block">Category: {{ item.product.tags }}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </th>
-                                <td class="border-1 align-middle"><strong>${{ item.product.price|floatformat:2 }}</strong></td>
-                                {% if item.quantity > item.product.stock %}
-                                <td class="border-1 align-middle"><strong><a href="" class="btn btn-info border-0 disabled" style="">Out of Stock</a></strong></td>
-                                {% else %}
-                                <td class="border-1 align-middle"><strong>{{ item.quantity }} <a href="{% url 'products:edit_item' item_id=item.id %}" class="text-dark"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></strong></td>
-                                {% endif %}
-                                <td class="border-1 align-middle"><a href="{% url 'products:delete_item' item_id=item.id %}" class="text-dark"><i class="fa fa-trash"></i></a></td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan=4 style="text-align: center"> <h4>Your cart is empty</h4></td>
-                            </tr>
-                            {% endfor %}
+                                    </th>
+                                    <td class="border-1 align-middle"><strong>${{ item.product.price|floatformat:2 }}</strong></td>
+                                    {% if item.quantity > item.product.stock %}
+                                    <td class="border-1 align-middle"><strong><a href="" class="btn btn-info border-0 disabled" style="">Out of Stock</a></strong></td>
+                                    {% else %}
+                                    <td class="border-1 align-middle"><strong>{{ item.quantity }} <a href="{% url 'products:edit_item' item_id=item.id %}" class="text-dark"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></strong></td>
+                                    {% endif %}
+                                    <td class="border-1 align-middle"><a href="{% url 'products:delete_item' item_id=item.id %}" class="text-dark"><i class="fa fa-trash"></i></a></td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan=4 style="text-align: center"> <h4>Your cart is empty</h4></td>
+                                </tr>
+                                {% endfor %}
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
 
+            <!-- Additional info and buttons -->
             <div class="row py-5 p-4 rounded shadow-sm" style="background-color: #F6F6F6;">
                 <div class="col-lg-6">
                     <div class="bg-info text-white rounded-pill px-4 py-3 text-uppercase font-weight-bold">Coupon code</div>
@@ -107,23 +112,23 @@
                             <li class="d-flex justify-content-between py-3 border-bottom">
                                 <strong class="text-muted">Shipping charges</strong>
                                 {% if order.get_shipping_charges != None %}
-                                    <strong>${{order.get_shipping_charges|floatformat:2}}</strong></li>
+                                <strong>${{order.get_shipping_charges|floatformat:2}}</strong></li>
                                 {% endif %}
                             <li class="d-flex justify-content-between py-3 border-bottom">
                                 <strong class="text-muted">Tax (10%)</strong>
                                 {% if order.get_tax != None %}
-                                    <strong>${{order.get_tax|floatformat:2}}</strong></li>
+                                <strong>${{order.get_tax|floatformat:2}}</strong></li>
                                 {% endif %}
                             <li class="d-flex justify-content-between py-3 border-bottom"><strong class="text-muted">Order Total</strong>
                                 {% if order.get_cart_total_plus_tax_plus_shipping != None %}
-                                    <h5 class="font-weight-bold">${{ order.get_cart_total_plus_tax_plus_shipping|floatformat:2 }}</h5>
+                                <h5 class="font-weight-bold">${{ order.get_cart_total_plus_tax_plus_shipping|floatformat:2 }}</h5>
                                 {% endif %}
                             </li>
                         </ul>
                         {% if order.get_cart_total_plus_tax_plus_shipping != None%}
-                            <a href="{% url 'products:checkout' %}" class="btn btn-dark rounded-pill py-2 btn-block">Proceed to checkout</a>
+                        <a href="{% url 'products:checkout' %}" class="btn btn-dark rounded-pill py-2 btn-block">Proceed to checkout</a>
                         {% else %}
-                            <a href="{% url 'products:checkout' %}" class="btn btn-dark rounded-pill py-2 btn-block disabled">Proceed to checkout</a>
+                        <a href="{% url 'products:checkout' %}" class="btn btn-dark rounded-pill py-2 btn-block disabled">Proceed to checkout</a>
                         {% endif %}
                     </div>
                 </div>

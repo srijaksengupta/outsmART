@@ -9,13 +9,15 @@
 {% load static %}
 <link rel="stylesheet" href="{% static 'chat/chatstyle.css' %}" type="text/css">
 
-
+<!-- Chatbox -->  
 <main class="chat-container">
     <div class="card-header bg-info text-light"> <i class="fas fa-comments"></i> {{ room_name }}'s chatroom</div>
     <div class="card-body">
         <div id="table-wrapper">
         <div id="table-scroll">
             <table id="chat-log">
+
+                <!-- Display previous messages --> 
                 {% for msg in msgs %}
                     {% if msg.sender == room_name %}
                         <tr><th style="background-color: #90ee90;">{{msg.content}}</th></tr>
@@ -24,6 +26,7 @@
                     {% endif %}
                 {% endfor %}
 
+                <!-- Scroll to the bottom of the table once done -->  
                 <script>        
                     var element = document.getElementById("table-scroll");
                     element.scrollTop = element.scrollHeight;
@@ -46,6 +49,7 @@
         'ws://' + window.location.host +
         '/ws/chat/' + roomName + '/');
 
+    // Add a message to the chatbox
     chatSocket.onmessage = function(e) {
         var data = JSON.parse(e.data);
         var message = data['message'];
@@ -55,7 +59,11 @@
         var row = table.insertRow(-1);
 
         var cell1 = row.insertCell(0);
+
+        // Insert the message 
         cell1.innerHTML = message;
+
+        // Check if sender is the owner of the chat
         if(username == roomName ){
             row.style.backgroundColor = "#90ee90";  
         }

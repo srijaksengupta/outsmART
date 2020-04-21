@@ -11,7 +11,7 @@
 
  <main class="product-container">
  
-    <!-- Left Column / Headphones Image -->
+    <!-- Left Column Image -->
     <div class="left-column">
       <img src="{{product.image.url}}" alt="" class="active">
     </div>
@@ -38,21 +38,14 @@
           {% endif %}
       </div>
 
-            <!-- Product Pricing -->
+      <!-- Owner Contact -->
       <div class="product-owner">
-            <p> {{product.owner}} is online</p>
-            <p>Click to join {{product.owner}}'s public chat room</p>
-            <p>Click to email {{product.owner}}</p>
-
+            <a href="{% url 'chat:room' product.owner %}">Click to join {{product.owner}}'s public chat room</a>
       </div>
       
 
     </div>
   </main>
-
-  <div class="reviews">
-      <h1>Customer Reviews</h1>
-  </div>
 
 
 {% endblock %}

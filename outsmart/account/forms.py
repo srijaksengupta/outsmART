@@ -4,35 +4,22 @@ from django.contrib.auth import authenticate, get_user_model
 
 User = get_user_model()
 
-def validate_mcgill_email(value):
-    if not value.endswith('mcgill.ca'):
-        raise ValidationError(
-            'Email not from mcgill domain',
-            code = 'not_mcgill'
-        )
-
+# Form for the registration of a user
 class SignupForm(forms.Form):
-    username = forms.CharField( 
-      # error_messages={'required': 'Gotta make a username!'}
-    )
-    
-    email = forms.EmailField(
-      validators=[validate_mcgill_email], 
-      error_messages={'not_mcgill': 'mcgill members only'})
-    
+    username = forms.CharField()
+    email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
     password_confirm = forms.CharField()
-
     
     def clean(self):
         cleaned_data = super(SignupForm, self).clean()
         
-        # Validation involving multiple fields
+        # Validation to check if pw is the same as confirm pw
         if 'password' in cleaned_data and 'password_confirm' in cleaned_data and cleaned_data['password'] != cleaned_data['password_confirm']:
             self.add_error('password_confirm', 'Passwords do not match')
         return cleaned_data
 
-
+# Form to allow users to login
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
@@ -41,6 +28,7 @@ class LoginForm(forms.Form):
         username = self.cleaned_data.get('username')
         password = self.cleaned_data.get('password')
 
+        #Validation for login
         if username and password:
             user = authenticate(username=username, password=password)
             if not user:

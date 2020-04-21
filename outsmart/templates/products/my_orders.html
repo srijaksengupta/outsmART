@@ -10,7 +10,7 @@
 
 <link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
 
-
+<!-- Loop through each order -->
 {% for order in orders %}
 
 <div class="order">
@@ -23,7 +23,7 @@
 
 <main class="listing-container">
 
-  <!-- Left Column / Headphones Image -->
+  <!-- Left Column Image -->
   <div class="listing-left-column">
     <img src="{{item.product.image.url}}" alt="" class="">
   </div>
@@ -46,6 +46,7 @@
 </main>
 {% endfor %}
 
+<!-- Order total -->
 <div class="order-footer">
   <h1> Order Total: ${{order.total}}</h1>
 </div>

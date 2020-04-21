@@ -10,7 +10,7 @@
 
 <link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
 
-
+<!-- Loop through each product sold -->
 {% for order in orders %}
 {% for item in order.items.all %}
 {% if item.product.owner == request.user %}
@@ -23,7 +23,7 @@
 
 <main class="listing-container">
 
-  <!-- Left Column / Headphones Image -->
+  <!-- Left Column Image -->
   <div class="listing-left-column">
     <img src="{{item.product.image.url}}" alt="" class="">
   </div>
