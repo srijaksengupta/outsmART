@@ -375,8 +375,10 @@ def manage_orders(request):
     for order in orders:
         items = order.items.all()
         for item in items:
-            if item.product.owner == request.user:
-                sold_items.append(order)
+            if(item.product != None):
+                if(item.product.owner == request.user):
+                    sold_items.append(order)
+                    break
 
     context = {'orders': sold_items}
     return render(request, 'products/manage_orders.html',context)
