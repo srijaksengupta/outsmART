@@ -9,41 +9,41 @@
 
 <link rel="stylesheet" href="{% static 'products/productstyle.css' %}" type="text/css">
 
-
+<!-- Wishlist container -->
 <div class="container">
     <div class="card shopping-cart">
-             <div class="card-header bg-danger text-light">
-                 <i class="fas fa-heart" aria-hidden="true"></i>
+         <div class="card-header bg-danger text-light">
+             <i class="fas fa-heart" aria-hidden="true"></i>
                  Your Wishlist
-                 <div class="clearfix"></div>
-             </div>
-             <div class="card-body">
-                {% for p in products %}
-                     <!-- PRODUCT -->
-                     <div class="wishProduct">
-                        <div class="row">
-                            <div class="col-12 col-sm-12 col-md-2 text-center">
-                                    <img class="img-responsive" src="{{p.product.image.url}}" alt="prewiew" width="120" height="80">
-                            </div>
-                            <div class="col-12 text-sm-center col-sm-12 text-md-left col-md-6">
-                                <h4 class="product-name"><strong><a href="{% url 'products:detail' p.product.id %}">{{p.product.title}}</a></strong></h4>
-                                <h4>
-                                    <small>{{p.product.summary}}</small>
-                                </h4>
-                            </div>
-                            
-                            <div class="col-sm-4 text-center">
-                            <form>
-                                {% csrf_token %}
-                                <button onclick='removeWishlist("{{p.product.id}}")' class="btn btn-danger" name="product" ><i class="fa fa-trash"></i></button>
-                            </form>
-                            </div>
-                        </div>
-                     </div>
-                {% endfor %}
-                     
-             </div>
+             <div class="clearfix"></div>
          </div>
+             
+         <div class="card-body">
+            {% for p in products %}
+            <!-- Display each product in wishlist -->
+            <div class="wishProduct">
+                <div class="row">
+                    <div class="col-12 col-sm-12 col-md-2 text-center">
+                            <img class="img-responsive" src="{{p.product.image.url}}" alt="prewiew" width="120" height="80">
+                    </div>
+                    <div class="col-12 text-sm-center col-sm-12 text-md-left col-md-6">
+                        <h4 class="product-name"><strong><a href="{% url 'products:detail' p.product.id %}">{{p.product.title}}</a></strong></h4>
+                        <h4>
+                            <small>{{p.product.summary}}</small>
+                        </h4>
+                    </div>
+                            
+                    <div class="col-sm-4 text-center">
+                        <form>
+                            {% csrf_token %}
+                            <button onclick='removeWishlist("{{p.product.id}}")' class="btn btn-danger" name="product" ><i class="fa fa-trash"></i></button>
+                        </form>
+                    </div>
+                </div>
+             </div>
+            {% endfor %}              
+         </div>
+     </div>
  </div>
 
 

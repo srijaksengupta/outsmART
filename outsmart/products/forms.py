@@ -2,24 +2,25 @@ from django.forms import ModelForm
 from .models import ProductPost, OrderItem, Order
 from django import forms
 
-
+# Form for creating a product
 class ProductPostForm(ModelForm):
     class Meta:
         model = ProductPost
         fields = ['title', 'summary', 'descrip', 'price', 'stock', 'image', 'tags']
 
-
+# Form for setting the quantity of an item in an order
 class OrderItemForm(ModelForm):
     class Meta:
         model = OrderItem
         fields = ['quantity']
 
-
+# Form for the shipping information
 class OrderForm(ModelForm):
     class Meta:
         model = Order
         fields = ['name', 'address', 'city', 'state', 'country']
 
+# Form for browsing products
 class SearchForm(forms.Form):
     search = forms.CharField(required=False)
     CHOICES = (('Relevance', 'Relevance'),('Newest', 'Newest'),('Oldest', 'Oldest'))

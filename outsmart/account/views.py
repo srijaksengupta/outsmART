@@ -12,7 +12,7 @@ from . import forms
 def info(request):
     return HttpResponse('Hello ' + request.user.username)
 
-
+# View to handle the signup page
 def signup(request):
     context = {}
     if request.method == 'POST':
@@ -28,11 +28,10 @@ def signup(request):
               return HttpResponseRedirect(reverse('account:login'))
             except IntegrityError:
                 form.add_error('username', 'Username is taken')
-
         context['form'] = form   
     return render(request, 'account/signup.html', context)
 
-
+# View to handle the login page
 def do_login(request):
     context = {}
     if request.method == 'POST':
@@ -42,6 +41,7 @@ def do_login(request):
             password = form.cleaned_data.get('password')
             user = authenticate(username=username, password=password)
             if user is not None:
+                #login the user
                 login(request, user)
                 next = request.GET.get('next')
                 if next:
@@ -52,7 +52,7 @@ def do_login(request):
         context['form'] = form
     return render(request, 'account/login.html', context)
 
-
+# Log the user out
 @login_required
 def do_logout(request):
     logout(request)
