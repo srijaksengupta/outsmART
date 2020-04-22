@@ -12,7 +12,7 @@ The platform allows users to add products to wish lists, add products to cart (i
 
 In order to handle payment verifications, the Stripe API has been integrated with the code.
 
-An integrated chat feature  allows buyers and sellers to chat with each other in real time using a private chat room.
+An integrated chat feature  allows buyers and sellers to chat with each other in real time using a public chat room.
 
 ### Assumptions, Constraints and Limitations of outsmART
 
