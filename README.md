@@ -38,4 +38,4 @@ Please do this setup in the following order:
 
 ### Created by
 
-Srijak Sengupta (260941978) & Nadim Rahman (260939968)
+Srijak Sengupta & Nadim Rahman
